@@ -16,8 +16,8 @@ defined('_JEXEC') or die;
  *
  * To use, first, include the class in your code, such as:
  *  $app  = JFactory::getApplication();
- *  $path = JPATH_THEMES . DIRECTORY_SEPARATOR . $app->getTemplate() . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'ItemHelper.php';
- *  JLoader::register('ItemHelper', $path);
+ *  $path = JPATH_THEMES . DIRECTORY_SEPARATOR . $app->getTemplate() . DIRECTORY_SEPARATOR . 'helpers' .
+ *  DIRECTORY_SEPARATOR . 'ItemHelper.php'; JLoader::register('ItemHelper', $path);
  *
  * Then, pass an item to the process function:
  *  ItemHelper::process($this->item)
@@ -26,11 +26,65 @@ defined('_JEXEC') or die;
  * override usage for more details.
  *
  * @author  Marty Friedel
- * @version 1.0
+ * @version 1.1
  * @see     https://github.com/martyf/joomla-item-helper
  */
 class ItemHelper
 {
+    /**
+     * Truncate a string to a given number of characters, keeping whole words.
+     *
+     * The final string may be longer than the defined $numberOfCharacters because we don't want to break words.
+     * Behaviour could be tweaked to make the string be NO LONGER THAN, however this behaviour has worked better for us.
+     *
+     * @param string $string             The string to process
+     * @param int    $numberOfCharacters Optional. The number of characters for our string.
+     *                                   Default 160 if not supplied.
+     *
+     * @return string
+     * @since 1.1
+     */
+    public static function truncate($string, $numberOfCharacters = 160)
+    {
+        // strip the tags
+        $string = strip_tags($string);
+
+        // if the length of the string is less than the number of characters, simply return
+        if (strlen($string) < $numberOfCharacters)
+        {
+            return $string;
+        }
+
+        // the individual words of our input string
+        $words = explode(' ', $string);
+
+        // the current number of characters in our new string
+        $counter = 0;
+
+        // an array for storing our words
+        $use = array();
+
+        // loop through all of the words
+        foreach ($words as $word)
+        {
+            // if the tally of characters is greater than or equal to the total number needed, leave the loop
+            if ($counter >= $numberOfCharacters)
+            {
+                // exit the loop
+                break;
+            }
+
+            // use the word
+            $use[] = $word;
+
+            // update the counter
+            $counter += strlen($word) + 1; // add 1 to add a space after the word
+        }
+
+        // join the array, add the ellipsis, and return
+        return implode(' ', $use) . '...';
+    }
+
     /**
      * Perform processing on a given Item.
      *
@@ -42,6 +96,7 @@ class ItemHelper
      * @param stdClass $item The item to process (i.e. an Article)
      *
      * @return stdClass The processed input item
+     * @since 1.0
      */
     public static function process(&$item)
     {
@@ -151,6 +206,7 @@ class ItemHelper
      * @param string   $property The property of the field
      *
      * @return bool|mixed   Return the property, or false if not found
+     * @since 1.0
      */
     protected static function getFieldProperty($item, $field, $property)
     {
@@ -184,6 +240,7 @@ class ItemHelper
      * @param string   $field The field name to find
      *
      * @return bool|string   Return the Group, or false if not found
+     * @since 1.0
      */
     public static function getFieldGroupId($item, $field)
     {
@@ -197,6 +254,7 @@ class ItemHelper
      * @param string   $field The field name to find
      *
      * @return bool|string   Return the Label, or false if not found
+     * @since 1.0
      */
     public static function getFieldLabel($item, $field)
     {
@@ -210,6 +268,7 @@ class ItemHelper
      * @param string   $field The field name to find
      *
      * @return bool|array   Return the Options, or false if not found
+     * @since 1.0
      */
     public static function getFieldOptions($item, $field)
     {
@@ -224,6 +283,7 @@ class ItemHelper
      *
      * @return bool|string|array   Return the Value, or false if not found
      *                             Value may be a string or an array
+     * @since 1.0
      */
     public static function getFieldValue($item, $field)
     {
@@ -238,6 +298,7 @@ class ItemHelper
      * @param string $string A string to test
      *
      * @return bool True if string is JSON, false otherwise
+     * @since 1.0
      */
     public static function isJSON($string)
     {
