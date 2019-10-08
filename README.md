@@ -76,6 +76,16 @@ or Checkboxes. Other Field Types will return an empty `array`.
 ItemHelper::getFieldOptions($this->item, 'my-field');
 ```
 
+## Truncate
+The truncate function makes it easy for you to truncate a string of your item to a specific number of characters, and keep 
+whole words in the process.
+
+Just call the `truncate` function, pass a string to truncate, and an optional number of characters to aim for:
+
+```PHP
+ItemHelper::truncate($this->item->introtext, 120);
+```
+
 ## Requests or issues
 
 If you're having any issues working with the ItemHelper, 
