@@ -1,3 +1,9 @@
+# NEW PLUGIN FOR JOOMLA 3
+
+This repository is no longer updated, and the Item Helper is now a plugin that you can install and update through Joomla.
+
+See [https://github.com/mitydigital/joomla-item-helper](https://github.com/mitydigital/joomla-item-helper) for more information.
+
 # Joomla ItemHelper
 
 This Joomla ItemHelper is used in template overrides to make some common actions much easier (and help centralise 
